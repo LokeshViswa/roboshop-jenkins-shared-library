@@ -1,38 +1,86 @@
-def abc = "Hello"
-def xyz = 10
+//pipeline {
+//
+//  agent {
+//    label 'ansible'
+//  }
+//
+//  stages {
+//
+//    stage('Hello') {
+//      steps {
+//        echo 'Hello World'
+//      }
+//    }
+//
+//    stage('Hello1') {
+//      steps {
+//        echo 'Hello World'
+//      }
+//    }
+//
+//    stage('Hello2') {
+//      steps {
+//        echo 'Hello World'
+//        mail bcc: '', body: 'Heloo this is a test email ', cc: '', from: '', replyTo: '', subject: 'Test', to: 'raghuk.vit@gmail.com'
+//      }
+//    }
+//
+//
+//  }
+//
+//  post {
+//    always {
+//      echo "sending email"
+//    }
+//  }
+//
+//}
 
-print "abc = ${abc}"
-print "xyz = ${xyz}"
+@Library('roboshop') _
 
-print abc
-//def new1() {
-//    print "hello"
-//    def xyz = "hello"
-//    print "xyz = ${xyz}"
-//    print "abc = ${abc}"
+env.abc = "Some Data"
+test1.new1()
+
+//pipeline {
+//  agent any
+//  stages {
+//    stage('test') {
+//      steps {
+//        script {
+//          env.abc = "Hello"
+//          def xyz = 10
+//          def x1 = true
 //
-//    if (abc == "Some Data") {
-//        print "YES"
-//    } else {
-//        print "NO"
+//          print "abc = ${abc}"
+//          print "xyz = ${xyz}"
+//
+//          print abc
+//
+//          def new1() {
+//            print "hello"
+//          }
+//
+//          new1()
+//
+//
+//
+//        }
+//
+//        script {
+//          print "abc = ${abc}"
+//        }
+//
+//      }
 //    }
 //
-//    def x = 2
-//    def y = 0
-//    while(x > y) {
-//        println "${y}"
-//        y++
+//    stage('test2') {
+//      steps {
+//        script {
+//          print "abc = ${abc}"
+//        }
+//      }
 //    }
 //
-//    for(int i = 0;i<5;i++) {
-//        println(i);
-//    }
-//
-//    def fruits = ["apple", "banana", "orange"];
-//
-//    for(i in fruits) {
-//        println(i);
-//    }
-//
+//  }
 //
 //}
