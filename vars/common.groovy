@@ -26,7 +26,7 @@ def unittests() {
 }
 
 def email(email_note) {
-    mail bcc: '', body: 'TEST', cc: '', from: 'vlokesh150596@gmail.com', replyTo: '', subject: 'TEST FROM JENKINS', to: 'vlokesh150596@gmail.com'
+    mail bcc: '', body: 'TEST\nNEW1\nNEW2', cc: '', from: 'vlokesh150596@gmail.com', replyTo: '', subject: 'TEST FROM JENKINS', to: 'vlokesh150596@gmail.com'
 }
 //
 //def email(email_note) {
