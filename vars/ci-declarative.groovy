@@ -1,35 +1,56 @@
 def call() {
     try {
-        node('workstation') {
+        pipeline {
 
-            stage('CleanUp') {
-                cleanWs()
+            agent {
+                label 'workstation'
             }
 
-            stage('Compile/Build') {
-                common.compile()
-            }
+            stages {
 
-            stage('Unit Tests') {
-                common.unittests()
-            }
-
-            stage('Quality Control') {
-                SONAR_PASS = sh ( script: 'aws ssm get-parameters --region us-east-1 --names sonarqube.pass  --with-decryption --query Parameters[0].Value | sed \'s/"//g\'', returnStdout: true).trim()
-                SONAR_USER = sh ( script: 'aws ssm get-parameters --region us-east-1 --names sonarqube.user  --with-decryption --query Parameters[0].Value | sed \'s/"//g\'', returnStdout: true).trim()
-                wrap([$class: 'MaskPasswordsBuildWrapper', varPasswordPairs: [[password: "${SONAR_PASS}", var: 'SECRET']]]) {
-                    sh "sonar-scanner -Dsonar.host.url=http://172.31.10.149:9000 -Dsonar.login=${SONAR_USER} -Dsonar.password=${SONAR_PASS} -Dsonar.projectKey=cart"
+                stage('Compile/Build') {
+                    steps {
+                        script {
+                            common.compile()
+                        }
+                    }
                 }
-            }
 
-            stage('Upload Code to Centralized Place') {
-                echo 'Upload'
-            }
+                stage('Unit Tests') {
+                    steps {
+                        script {
+                            common.unittests()
+                        }
+                    }
+                }
 
+                stage('Quality Control') {
+                    environment {
+                        SONAR_USER = '$(aws ssm get-parameters --region us-east-1 --names sonarqube.user  --with-decryption --query Parameters[0].Value | sed \'s/"//g\')'
+//                        SONAR_PASS = '$(aws ssm get-parameters --region us-east-1 --names sonarqube.pass  --with-decryption --query Parameters[0].Value | sed \'s/"//g\')'
+                    }
+                    steps {
+                        script {
+                            SONAR_PASS = sh ( script: 'aws ssm get-parameters --region us-east-1 --names sonarqube.pass  --with-decryption --query Parameters[0].Value | sed \'s/"//g\'', returnStdout: true).trim()
+                            wrap([$class: 'MaskPasswordsBuildWrapper', varPasswordPairs: [[password: "${SONAR_PASS}", var: 'SECRET']]]) {
+                                sh "sonar-scanner -Dsonar.host.url=http://172.31.10.149:9000 -Dsonar.login=${SONAR_USER} -Dsonar.password=${SONAR_PASS} -Dsonar.projectKey=cart"
+                            }
+                        }
+                    }
+                }
+
+                stage('Upload Code to Centralized Place') {
+                    steps {
+                        echo 'Upload'
+                    }
+                }
+
+
+            }
 
         }
-
-    } catch(Exception e) {
-        common.email("Failed")
+    } catch (Exception e) {
+      common.email("Failed")
     }
 }
+
