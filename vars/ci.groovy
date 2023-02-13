@@ -26,7 +26,10 @@ def call() {
 
                 stage('Quality Control') {
                     steps {
-                        echo 'Quality Control'
+                        withAWSParameterStore(credentialsId: '', naming: 'relative', path: '/service', recursive: true, regionName: 'eu-west-1') {
+                            echo "USER = ${env.SONARQUBE_USER}"
+                        }
+
                     }
                 }
 
