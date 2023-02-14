@@ -8,6 +8,7 @@ def call() {
             stage('Checkout') {
                 cleanWs()
                 git branch: 'main', url: "https://github.com/LokeshViswa/${component}"
+                sh 'env'
             }
 
             stage('Compile/Build') {
