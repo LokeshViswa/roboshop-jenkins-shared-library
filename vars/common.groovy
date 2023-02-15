@@ -34,9 +34,9 @@ def artifactPush() {
     sh "echo ${TAG_NAME} >VERSION"
 
     if (app_lang == "nodejs") {
-        sh "zip -r ${component}-${TAG_NAME}.zip node_modules server.js VERSION"
+        sh "zip -r ${component}-${TAG_NAME}.zip node_modules server.js VERSION ${extraFiles}"
     }
-    sh 'ls -l '
+
 
     NEXUS_PASS = sh(script: 'aws ssm get-parameters --region us-east-1 --names nexus.pass  --with-decryption --query Parameters[0].Value | sed \'s/"//g\'', returnStdout: true).trim()
     NEXUS_USER = sh(script: 'aws ssm get-parameters --region us-east-1 --names nexus.user  --with-decryption --query Parameters[0].Value | sed \'s/"//g\'', returnStdout: true).trim()
