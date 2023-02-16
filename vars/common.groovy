@@ -1,9 +1,9 @@
 def compile() {
-    if (app_lang == "nodejs") {
+  if (app_lang == "nodejs") {
         sh 'npm install'
     }
 
-    if (app_lang == "maven") {
+  if (app_lang == "maven") {
         sh "mvn clean compile"
     }
 
@@ -11,17 +11,17 @@ def compile() {
 
 def unittests() {
 
-    if (app_lang == "nodejs") {
+  if (app_lang == "nodejs") {
         // Developer is missing unit test cases in our project, He need to add them as best practice, We are skipping to proceed further
         sh 'npm test || true'
 
     }
 
-    if (app_lang == "maven") {
+  if (app_lang == "maven") {
         sh 'mvn test'
     }
 
-    if (app_lang == "python") {
+  if (app_lang == "python") {
         sh 'python3 -m unittest'
     }
 }
@@ -33,15 +33,15 @@ def email(email_note) {
 def artifactPush() {
     sh "echo ${TAG_NAME} >VERSION"
 
-    if (app_lang == "nodejs") {
+  if (app_lang == "nodejs") {
         sh "zip -r ${component}-${TAG_NAME}.zip node_modules server.js VERSION ${extraFiles}"
     }
 
-    if (app_lang == "nginx" || app_lang == "python") {
+  if (app_lang == "nginx" || app_lang == "python") {
         sh "zip -r ${component}-${TAG_NAME}.zip * -x Jenkinsfile ${extraFiles}"
     }
 
-    if (app_lang == "maven") {
+  if (app_lang == "maven") {
         sh "zip -r ${component}-${TAG_NAME}.zip * ${component}.jar VERSION ${extraFiles}"
     }
 
